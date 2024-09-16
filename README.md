@@ -1,2 +1,1 @@
-# FruitNinjaReplica
-Fruit Ninja like game.
+# JustGame-FruitNinja
