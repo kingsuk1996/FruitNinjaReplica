@@ -1,7 +1,4 @@
-﻿/// Created By Sayam Sahis
-/// Updated By Sayam Sahis On 23.12.2022
-
-using DevCommons.Sound;
+﻿
 using System.Linq;
 using UnityEngine;
 public class AudioManager : MonoBehaviour
@@ -55,7 +52,7 @@ public class AudioManager : MonoBehaviour
     /// <returns></returns>
     public AudioSource Play(AudioData.EAudio id, float volume, bool IsLoop, AudioType audioType)
     {
-        
+
         if (audioType == AudioType.Music)
             if (PlayerPrefs.GetInt(AudioConstants.music) == 1)
                 return null;
@@ -79,7 +76,7 @@ public class AudioManager : MonoBehaviour
             return null;
     }
 
-  
+
 }
 /// <summary>
 /// Audio constant variables

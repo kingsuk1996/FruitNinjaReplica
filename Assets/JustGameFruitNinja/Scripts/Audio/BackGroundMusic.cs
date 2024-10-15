@@ -1,5 +1,4 @@
-﻿/// created By Sayam sahis 13.12.2022
-/// Updated By Sayam sahis 26.12.2022
+﻿
 
 using UnityEngine;
 
@@ -16,7 +15,7 @@ public class BackGroundMusic : MonoBehaviour
             backgroundMusic = AudioManager.Instance.Play(AudioData.EAudio.BackGroundMusic, 0.2f, true, AudioManager.AudioType.Music);
         }
     }
-   
+
     /// <summary>
     /// Stop playing the background music
     /// </summary>
@@ -34,7 +33,7 @@ public class BackGroundMusic : MonoBehaviour
         {
             backgroundMusic.Play();
             return;
-        }       
+        }
         backgroundMusic = AudioManager.Instance.Play(AudioData.EAudio.BackGroundMusic, .2f, true, AudioManager.AudioType.Music);
     }
     /// <summary>
@@ -49,7 +48,7 @@ public class BackGroundMusic : MonoBehaviour
         }
         backgroundMusic = AudioManager.Instance.Play(Audio, 1f, true, AudioManager.AudioType.Music);
     }*/
-    
+
     void OnDestroy()
     {
         Destroy(backgroundMusic);

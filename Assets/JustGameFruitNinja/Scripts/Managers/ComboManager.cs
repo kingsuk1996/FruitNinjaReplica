@@ -1,114 +1,106 @@
-// Created by Kingsuk Guha on 19/12/2022
-// Updated by Tushar on 22/12/2022
-// Updated by DevTushar on 27/12/2022
-// Updated by Kingsuk on 28/12/2022
-// Updated by DevTushar on 30/12/2022
-// Updated by Kingsuk on 13/1/2022
 
 using System.Collections;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
-namespace FruitChop
+
+public class ComboManager : MonoBehaviour
 {
-    public class ComboManager : MonoBehaviour
+    bool timerStart = false;
+
+    private int comboCounter = 0;
+    [SerializeField] private float timer = 1f;
+
+    /// <summary>
+    /// Initially fruit count 0.
+    /// </summary>
+    private void Start()
     {
-        bool timerStart = false;
+        comboCounter = 0;
+    }
 
-        private int comboCounter = 0;
-        [SerializeField] private float timer = 1f;
-
-        /// <summary>
-        /// Initially fruit count 0.
-        /// </summary>
-        private void Start()
+    /// <summary>
+    /// When we cut the fruit timer will be decreased everytime.
+    /// if the counter greater equal to 3 that will be combo.
+    /// </summary>
+    private void Update()
+    {
+        if (timerStart)
         {
+            timer -= Time.deltaTime;
+        }
+        if (timer <= 0)
+        {
+            timerStart = false;
+            timer = 1f;
+
+            if (comboCounter >= 3)
+            {
+                AudioManager.Instance.Play(AudioData.EAudio.ComboSound, 1, false, AudioManager.AudioType.Sound);
+                StartCoroutine(TextPopUp());
+            }
             comboCounter = 0;
         }
+    }
 
-        /// <summary>
-        /// When we cut the fruit timer will be decreased everytime.
-        /// if the counter greater equal to 3 that will be combo.
-        /// </summary>
-        private void Update()
+    /// <summary>
+    /// When timer is greater than 0 timer will be start and counter will be increased.
+    /// </summary>
+    public void ComboCheck()
+    {
+        if (timer > 0f)
         {
-            if (timerStart)
-            {
-                timer -= Time.deltaTime;
-            }
-            if (timer <= 0)
-            {
-                timerStart = false;
-                timer = 1f;
+            timerStart = true;
+            comboCounter++;
+        }
+    }
 
-                if (comboCounter >= 3)
-                {
-                    AudioManager.Instance.Play(AudioData.EAudio.ComboSound, 1, false, AudioManager.AudioType.Sound);
-                    StartCoroutine(TextPopUp());
-                }
-                comboCounter = 0;
-            }
+    /// <summary>
+    /// Show Combo PopUp
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator TextPopUp()
+    {
+        int comboPoints;
+        GameObject textPopUp = Refrences.Instance.objectPooler.SpawnFromPool(GameConstants.PopUPTag, transform.position, Quaternion.identity);
+        if (comboCounter == 3)
+        {
+            comboPoints = 50;
+            textPopUp.GetComponentInChildren<TextMeshProUGUI>().text = comboCounter.ToString() + " Fruit Combo \n +" + comboPoints;
+            Animator textAnimator = textPopUp.GetComponentInChildren<Animator>();
+            textAnimator.SetTrigger("TextUp");
+            Refrences.Instance.uiManager.Score(comboPoints);
         }
 
-        /// <summary>
-        /// When timer is greater than 0 timer will be start and counter will be increased.
-        /// </summary>
-        public void ComboCheck()
+        if (comboCounter == 4)
         {
-            if (timer > 0f)
-            {
-                timerStart = true;
-                comboCounter++;
-            }
+            comboPoints = 70;
+            textPopUp.GetComponentInChildren<TextMeshProUGUI>().text = comboCounter.ToString() + " Fruit Combo \n +" + comboPoints;
+            Animator textAnimator = textPopUp.GetComponentInChildren<Animator>();
+            textAnimator.SetTrigger("TextUp");
+            Refrences.Instance.uiManager.Score(comboPoints);
         }
 
-        /// <summary>
-        /// Show Combo PopUp
-        /// </summary>
-        /// <returns></returns>
-        IEnumerator TextPopUp()
+        if (comboCounter == 5)
         {
-            int comboPoints;
-            GameObject textPopUp = Refrences.Instance.objectPooler.SpawnFromPool(GameConstants.PopUPTag, transform.position, Quaternion.identity);
-            if (comboCounter == 3)
-            {
-                comboPoints = 50;
-                textPopUp.GetComponentInChildren<TextMeshProUGUI>().text = comboCounter.ToString() + " Fruit Combo \n +" + comboPoints;
-                Animator textAnimator = textPopUp.GetComponentInChildren<Animator>();
-                textAnimator.SetTrigger("TextUp");
-                Refrences.Instance.uiManager.Score(comboPoints);
-            }
-
-            if (comboCounter == 4)
-            {
-                comboPoints = 70;
-                textPopUp.GetComponentInChildren<TextMeshProUGUI>().text = comboCounter.ToString() + " Fruit Combo \n +" + comboPoints;
-                Animator textAnimator = textPopUp.GetComponentInChildren<Animator>();
-                textAnimator.SetTrigger("TextUp");
-                Refrences.Instance.uiManager.Score(comboPoints);
-            }
-
-            if (comboCounter == 5)
-            {
-                comboPoints = 100;
-                textPopUp.GetComponentInChildren<TextMeshProUGUI>().text = comboCounter.ToString() + " Fruit Combo \n +" + comboPoints;
-                Animator textAnimator = textPopUp.GetComponentInChildren<Animator>();
-                textAnimator.SetTrigger("TextUp");
-                Refrences.Instance.uiManager.Score(comboPoints);
-            }
-
-            if (comboCounter == 6)
-            {
-                comboPoints = 150;
-                textPopUp.GetComponentInChildren<TextMeshProUGUI>().text = comboCounter.ToString() + " Fruit Combo \n +" + comboPoints;
-                Animator textAnimator = textPopUp.GetComponentInChildren<Animator>();
-                textAnimator.SetTrigger("TextUp");
-                Refrences.Instance.uiManager.Score(comboPoints);
-            }
-
-            yield return new WaitForSeconds(1);
-            textPopUp.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
-            textPopUp.SetActive(false);
+            comboPoints = 100;
+            textPopUp.GetComponentInChildren<TextMeshProUGUI>().text = comboCounter.ToString() + " Fruit Combo \n +" + comboPoints;
+            Animator textAnimator = textPopUp.GetComponentInChildren<Animator>();
+            textAnimator.SetTrigger("TextUp");
+            Refrences.Instance.uiManager.Score(comboPoints);
         }
+
+        if (comboCounter == 6)
+        {
+            comboPoints = 150;
+            textPopUp.GetComponentInChildren<TextMeshProUGUI>().text = comboCounter.ToString() + " Fruit Combo \n +" + comboPoints;
+            Animator textAnimator = textPopUp.GetComponentInChildren<Animator>();
+            textAnimator.SetTrigger("TextUp");
+            Refrences.Instance.uiManager.Score(comboPoints);
+        }
+
+        yield return new WaitForSeconds(1);
+        textPopUp.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+        textPopUp.SetActive(false);
     }
 }
